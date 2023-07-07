@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Notes nest</title>
+  </head>
+  <body>
+    <div class="grid">
+      <header>
+        <img src="assets/logo.svg" alt="notes nest logo" />
+        <h1>Notes Nest</h1>
+      </header>
+      <div class="note-input">
+        <input type="text" id="note-input" placeholder="Take a note..." />
+        <div class="note-settings">
+          <div class="colors-container">
+            <div class="color" id="color1"></div>
+            <div class="color" id="color2"></div>
+            <div class="color" id="color3"></div>
+            <div class="color" id="color4"></div>
+            <div class="color" id="color5"></div>
+            <div class="color" id="color6"></div>
+            <div class="color" id="color7"></div>
+          </div>
+          <div class="buttons-container">
+            <button id="nest">
+              Nest <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <button id="add-note">
+              Add note <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="nest"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
