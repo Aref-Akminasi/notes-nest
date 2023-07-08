@@ -3,7 +3,8 @@
 
 :root {
   font-size: 10px;
-  --text-color: #f2f2f2;
+  --text-color: rgb(242, 242, 242);
+  --text-color-off: rgba(242, 242, 242, 0.25);
   --black: #121212;
   --dark-grey: #1f1f1f;
   --purple: #bb86fc;
@@ -133,12 +134,16 @@ h1 {
 
 .nest {
   grid-column: 1/13;
-  border: 0.5rem dashed var(--text-color);
+  border-image: url(/assets/r1.svg);
+  border-image-slice: 25%;
+  border-image-width: 1rem;
+  border-image-repeat: repeat;
   margin-top: 5rem;
   padding: 2rem;
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  min-height: 10rem;
 }
 
 #color1 {
@@ -189,14 +194,36 @@ h1 {
   flex-direction: column;
   justify-content: space-between;
 }
-
-.trash {
+.icons-container {
+  margin-top: 2rem;
   display: flex;
   justify-content: flex-end;
-  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.edit {
+  width: 1.5rem;
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   cursor: pointer;
+}
+
+.trash {
+  width: 1.5rem;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.error {
+  margin-top: 1rem;
+  text-align: center;
+  grid-row: 3/4;
+  grid-column: 5/9;
+  color: var(--error);
+  font-family: 'lato';
+  font-size: 1.6rem;
+  visibility: hidden;
 }
 
 @media (max-width: 1000px) {

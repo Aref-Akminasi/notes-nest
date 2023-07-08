@@ -2,6 +2,8 @@ const colors = document.querySelectorAll('.color');
 const addNoteBtn = document.getElementById('add-note');
 const noteInput = document.getElementById('note-input');
 const nest = document.querySelector('.nest');
+const error = document.querySelector('.error');
+let edit = '';
 let trash = '';
 let notes = '';
 let selectedColor = 'rgb(85, 107, 47)';
@@ -12,10 +14,11 @@ function updateNotes() {
     const oldNotes = JSON.parse(localStorage.getItem('notes'));
     for (let i = 0; i < oldNotes.length; i++) {
       allNotes.push(oldNotes[i]);
-      nest.innerHTML += `<div class="note" style="background-color:${oldNotes[i][1]}" draggable="true">${oldNotes[i][0]} <i class="fa-sharp fa-solid fa-trash trash"></i></div>`;
+      nest.innerHTML += `<div class="note" style="background-color:${oldNotes[i][1]}">${oldNotes[i][0]} <div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div></div>`;
     }
     notes = document.querySelectorAll('.note');
     trash = document.querySelectorAll('.trash');
+    edit = document.querySelectorAll('.edit');
   } catch {
     return false;
   }
@@ -23,9 +26,19 @@ function updateNotes() {
 
 updateNotes();
 
+edit.forEach((edit) => {
+  edit.addEventListener('click', editNote);
+});
+
 if (trash.length > 0) {
   trash.forEach((trash) => {
     trash.addEventListener('click', deleteNote);
+  });
+}
+
+if (edit.length > 0) {
+  edit.forEach((edit) => {
+    edit.addEventListener('click', editNote);
   });
 }
 
@@ -34,8 +47,24 @@ colors.forEach((color) => {
   color.addEventListener('click', selectColor);
 });
 
+function editNote() {
+  console.log('note edited', this.parentElement.parentElement);
+  let newContent = prompt(
+    'Edit note',
+    this.parentElement.parentElement.innerText
+  );
+  this.parentElement.parentElement.innerHTML = `${newContent}<div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div>`;
+  trash = document.querySelectorAll('.trash');
+  edit = document.querySelectorAll('.edit');
+  edit.forEach((edit) => {
+    edit.addEventListener('click', editNote);
+  });
+  trash.forEach((trash) => {
+    trash.addEventListener('click', deleteNote);
+  });
+}
 function deleteNote() {
-  this.parentElement.remove();
+  this.parentElement.parentElement.remove();
   allNotes = [];
   notes = document.querySelectorAll('.note');
   notes.forEach((note) => {
@@ -53,13 +82,23 @@ function selectColor() {
 }
 
 function addNote() {
-  nest.innerHTML += `<div class="note" style="background-color:${selectedColor}" draggable="true">${noteInput.value} <i class="fa-sharp fa-solid fa-trash trash"></i></div>`;
-  let note = [noteInput.value, selectedColor];
-  allNotes.push(note);
-  localStorage.setItem('notes', JSON.stringify(allNotes));
-  notes = document.querySelectorAll('.note');
-  trash = document.querySelectorAll('.trash');
-  trash.forEach((trash) => {
-    trash.addEventListener('click', deleteNote);
-  });
+  if (noteInput.value == '') {
+    error.style.visibility = 'visible';
+  } else {
+    error.style.visibility = 'hidden';
+    nest.innerHTML += `<div class="note" style="background-color:${selectedColor}">${noteInput.value}<div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div></div>`;
+    let note = [noteInput.value, selectedColor];
+    allNotes.push(note);
+    localStorage.setItem('notes', JSON.stringify(allNotes));
+    notes = document.querySelectorAll('.note');
+    trash = document.querySelectorAll('.trash');
+    edit = document.querySelectorAll('.edit');
+    trash.forEach((trash) => {
+      trash.addEventListener('click', deleteNote);
+    });
+    edit.forEach((edit) => {
+      edit.addEventListener('click', editNote);
+    });
+    noteInput.value = '';
+  }
 }
