@@ -25,11 +25,6 @@ function updateNotes() {
 }
 
 updateNotes();
-
-edit.forEach((edit) => {
-  edit.addEventListener('click', editNote);
-});
-
 if (trash.length > 0) {
   trash.forEach((trash) => {
     trash.addEventListener('click', deleteNote);
@@ -41,6 +36,9 @@ if (edit.length > 0) {
     edit.addEventListener('click', editNote);
   });
 }
+edit.forEach((edit) => {
+  edit.addEventListener('click', editNote);
+});
 
 addNoteBtn.addEventListener('click', addNote);
 colors.forEach((color) => {
