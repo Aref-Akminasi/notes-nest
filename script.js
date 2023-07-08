@@ -3,7 +3,7 @@ const addNoteBtn = document.getElementById('add-note');
 const noteInput = document.getElementById('note-input');
 const nest = document.querySelector('.nest');
 const error = document.querySelector('.error');
-let edit = '';
+let edits = '';
 let trash = '';
 let notes = '';
 let selectedColor = 'rgb(85, 107, 47)';
@@ -36,9 +36,6 @@ if (edit.length > 0) {
     edit.addEventListener('click', editNote);
   });
 }
-edit.forEach((edit) => {
-  edit.addEventListener('click', editNote);
-});
 
 addNoteBtn.addEventListener('click', addNote);
 colors.forEach((color) => {
