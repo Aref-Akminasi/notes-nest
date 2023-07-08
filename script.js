@@ -18,7 +18,7 @@ function updateNotes() {
     }
     notes = document.querySelectorAll('.note');
     trash = document.querySelectorAll('.trash');
-    edit = document.querySelectorAll('.edit');
+    edits = document.querySelectorAll('.edit');
   } catch {
     return false;
   }
@@ -31,8 +31,8 @@ if (trash.length > 0) {
   });
 }
 
-if (edit.length > 0) {
-  edit.forEach((edit) => {
+if (edits.length > 0) {
+  edits.forEach((edit) => {
     edit.addEventListener('click', editNote);
   });
 }
@@ -43,15 +43,14 @@ colors.forEach((color) => {
 });
 
 function editNote() {
-  console.log('note edited', this.parentElement.parentElement);
   let newContent = prompt(
     'Edit note',
     this.parentElement.parentElement.innerText
   );
   this.parentElement.parentElement.innerHTML = `${newContent}<div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div>`;
   trash = document.querySelectorAll('.trash');
-  edit = document.querySelectorAll('.edit');
-  edit.forEach((edit) => {
+  edits = document.querySelectorAll('.edit');
+  edits.forEach((edit) => {
     edit.addEventListener('click', editNote);
   });
   trash.forEach((trash) => {
@@ -87,11 +86,11 @@ function addNote() {
     localStorage.setItem('notes', JSON.stringify(allNotes));
     notes = document.querySelectorAll('.note');
     trash = document.querySelectorAll('.trash');
-    edit = document.querySelectorAll('.edit');
+    edits = document.querySelectorAll('.edit');
     trash.forEach((trash) => {
       trash.addEventListener('click', deleteNote);
     });
-    edit.forEach((edit) => {
+    edits.forEach((edit) => {
       edit.addEventListener('click', editNote);
     });
     noteInput.value = '';
