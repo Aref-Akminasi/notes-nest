@@ -134,7 +134,7 @@ h1 {
 
 .nest {
   grid-column: 1/13;
-  border-image: url(/assets/border.svg) 25% repeat;
+  border-image: url(assets/border.svg) 25% repeat;
   border-image-width: 1rem;
   margin-top: 5rem;
   padding: 2rem;
