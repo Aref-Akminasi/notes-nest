@@ -232,3 +232,9 @@ h1 {
     gap: 1rem;
   }
 }
+
+@media (max-width: 600px) {
+  .nest {
+    justify-content: center;
+  }
+}
