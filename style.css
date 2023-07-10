@@ -44,6 +44,7 @@ h1 {
   grid-template-columns: repeat(12, 1fr);
   max-width: 160rem;
   margin: auto;
+  margin-bottom: 5rem;
 }
 
 .note-creation-container {
@@ -149,7 +150,7 @@ h1 {
   color: var(--error);
   font-family: 'lato';
   font-size: 1.6rem;
-  visibility: visible;
+  visibility: hidden;
 }
 
 .nest {
