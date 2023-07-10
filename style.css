@@ -76,6 +76,7 @@ h1 {
   border-radius: 50%;
   display: inline-block;
   cursor: pointer;
+  outline: 0;
 }
 
 .colors-container {
