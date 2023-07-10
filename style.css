@@ -200,7 +200,11 @@ h1 {
   cursor: pointer;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 750px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    padding: 0 5rem;
+  }
   h1 {
     font-size: 2.4rem;
   }
@@ -210,7 +214,7 @@ h1 {
   }
   .note-creation-container {
     height: 20rem;
-    grid-column: 2/12;
+    grid-column: 1/7;
   }
   .colors-container {
     justify-self: center;
@@ -223,9 +227,16 @@ h1 {
     grid-column: 1/3;
     width: 100%;
   }
+  .nest {
+    grid-column: 1/7;
+  }
 }
 
 @media (max-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem;
+  }
   header {
     padding: 0;
     margin-top: 2rem;
@@ -242,10 +253,7 @@ h1 {
   }
   .note-creation-container {
     height: 20rem;
-    grid-column: 1/13;
-  }
-  .grid {
-    padding: 2rem;
+    grid-column: 1/3;
   }
   .colors-container {
     flex-wrap: wrap;
@@ -259,7 +267,7 @@ h1 {
     cursor: pointer;
   }
   .nest {
-    grid-column: 1/13;
+    grid-column: 1/3;
     justify-content: center;
   }
 }
