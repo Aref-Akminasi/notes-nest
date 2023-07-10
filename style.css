@@ -152,6 +152,52 @@ h1 {
   visibility: visible;
 }
 
+.nest {
+  grid-column: 2/12;
+  border-image: url(assets/border.svg) 25% repeat;
+  border-image-width: 1rem;
+  margin-top: 5rem;
+  padding: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-height: 10rem;
+}
+
+.note {
+  width: 20rem;
+  font-family: 'lato';
+  font-size: 1.6rem;
+  color: var(--text-color);
+  padding: 1rem;
+  min-height: 20rem;
+  text-justify: justify;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.icons-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.edit {
+  width: 1.7rem;
+  color: #fff;
+  font-size: 1.7rem;
+  cursor: pointer;
+}
+
+.trash {
+  width: 1.7rem;
+  color: #fff;
+  font-size: 1.7rem;
+  cursor: pointer;
+}
+
 @media (max-width: 800px) {
   h1 {
     font-size: 2.4rem;
@@ -209,5 +255,9 @@ h1 {
     border-radius: 50%;
     display: inline-block;
     cursor: pointer;
+  }
+  .nest {
+    grid-column: 1/13;
+    justify-content: center;
   }
 }
