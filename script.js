@@ -146,5 +146,5 @@ function fetchNotes() {
   }
 }
 
-// Start the app
+// Fetch notes from the LS when the window has loaded
 fetchNotes();
