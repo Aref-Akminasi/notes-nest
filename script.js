@@ -74,7 +74,11 @@ function addNote(note) {
     iconsContainer.appendChild(edit);
     iconsContainer.appendChild(trash);
     newNote.appendChild(iconsContainer);
-    nest.appendChild(newNote);
+    if (note) {
+      nest.appendChild(newNote);
+    } else {
+      nest.insertBefore(newNote, nest.firstChild);
+    }
 
     // Add Event Listeners
     edit.addEventListener('click', (e) => editNote(e.target));
