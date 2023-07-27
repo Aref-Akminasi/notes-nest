@@ -23,7 +23,7 @@
     </header>
     <div class="grid">
       <div class="note-creation-container">
-        <input type="text" id="note-input" placeholder="Take a note..." />
+        <textarea id="note-input" placeholder="Take a note..."></textarea>
         <div class="colors-container">
           <div class="color" id="color1"></div>
           <div class="color" id="color2"></div>
@@ -33,9 +33,14 @@
           <div class="color" id="color6"></div>
           <div class="color" id="color7"></div>
         </div>
-        <button id="add-note">Add note <i class="fa-solid fa-plus"></i></button>
+        <button class="btn" id="add-note">
+          Add note <i class="fa-solid fa-plus"></i>
+        </button>
       </div>
       <div class="error">The content of a note can't be empty</div>
+      <button class="btn delete" id="delete-notes">
+        Delete all notes <i class="fa-sharp fa-solid fa-trash"></i>
+      </button>
       <div class="nest"></div>
     </div>
     <script src="script.js"></script>

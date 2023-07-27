@@ -1,26 +1,23 @@
-//Defining the static elements of the HTML
 const colors = document.querySelectorAll('.color');
 const addNoteBtn = document.getElementById('add-note');
 const noteInput = document.getElementById('note-input');
 const nest = document.querySelector('.nest');
 const error = document.querySelector('.error');
-//Defining the variable elements that will change through time by adding or deleting notes
-let edits = '';
-let trash = '';
-let note = '';
-let allNotes = [];
+const deleteNotesBtn = document.getElementById('delete-notes');
 let selectedColor = 'rgb(85, 107, 47)';
+let isEditing = false;
+let currentEdit = '';
 
-//Defining the event listeners for the static elements
-addNoteBtn.addEventListener('click', addNote);
 colors.forEach((color) => {
   color.addEventListener('click', selectColor);
 });
+
+deleteNotesBtn.addEventListener('click', () => {
+  nest.innerHTML = '';
+});
+
 noteInput.addEventListener('focus', () => (error.style.visibility = 'hidden'));
 
-importNotes(); //Importing notes that are saved in the local storage
-
-//Changing the color of the note that is being written based on the user's choice
 function selectColor() {
   colors.forEach((color) => {
     color.style.border = 'solid 0.1rem #fff';
@@ -29,81 +26,98 @@ function selectColor() {
   selectedColor = getComputedStyle(this).backgroundColor;
 }
 
-function addNote() {
-  if (noteInput.value == '') {
-    error.style.visibility = 'visible';
-  } else {
-    error.style.visibility = 'hidden';
-    nest.innerHTML += `<div class="note" style="background-color:${selectedColor}">${noteInput.value}<div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div></div>`;
-    let note = [noteInput.value, selectedColor];
-    allNotes.push(note); //Notes are added in the HTML and also in an array who contains the note input value and color value
+function addNote(note) {
+  let note_text = noteInput.value;
+  let note_color = selectedColor;
+  if (note) {
+    note_text = note.text;
+    note_color = note.color;
+  }
+  if (note_text) {
+    const newNote = document.createElement('div');
+    const noteText = document.createElement('p');
+    const iconsContainer = document.createElement('div');
+    const edit = document.createElement('i');
+    const trash = document.createElement('i');
+
+    newNote.classList.add('note');
+    newNote.style.backgroundColor = note_color;
+
+    noteText.classList.add('note-text');
+    noteText.innerText = note_text;
+
+    edit.className = 'fa-solid fa-pen edit';
+    trash.className = 'fa-sharp fa-solid fa-trash trash';
+
+    iconsContainer.classList.add('icons-container');
+
+    newNote.appendChild(noteText);
+    iconsContainer.appendChild(edit);
+    iconsContainer.appendChild(trash);
+    newNote.appendChild(iconsContainer);
+    nest.appendChild(newNote);
+
+    edit.addEventListener('click', (e) => editNote(e.target));
+    trash.addEventListener('click', (e) => deleteNote(e.target));
     noteInput.value = '';
-    initialize(); //For defining the event listeners for the edit and trash for the new note
-    updateLocalStorage(); //For adding the new note to the local storage
-  }
-}
-
-function editNote() {
-  let newContent = prompt(
-    'Edit note',
-    this.parentElement.parentElement.innerText
-  );
-  if (newContent) {
-    this.parentElement.parentElement.innerHTML = `${newContent}<div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div>`;
+    updateLS();
   } else {
-    //If the user left the prompt empty, the original text will re-appear
-    return false;
+    error.style.visibility = 'visible';
   }
-  updateAllNotes();
-  initialize();
-  updateLocalStorage();
 }
 
-function deleteNote() {
-  this.parentElement.parentElement.remove();
-  updateAllNotes();
-  updateLocalStorage();
+addNoteBtn.addEventListener('click', () => addNote());
+
+function editNote(edit) {
+  const note = edit.parentElement.parentElement;
+  const p = note.firstChild;
+  const noteText = p.innerText;
+  if (!isEditing) {
+    isEditing = true;
+    p.remove();
+    const textArea = document.createElement('textarea');
+    textArea.value = noteText;
+    note.insertBefore(textArea, note.firstChild);
+    textArea.focus();
+    currentEdit = note;
+  } else if (note == currentEdit) {
+    isEditing = false;
+    const p = document.createElement('p');
+    p.innerText = note.firstChild.value;
+    p.classList.add('note-text');
+    note.firstChild.remove();
+    note.insertBefore(p, note.firstChild);
+    currentEdit = '';
+    updateLS();
+  }
 }
 
-function updateAllNotes() {
-  //This function takes all HTML elements that has the class of note on it and parse their text value and color into the all notes array
-  allNotes = [];
-  notes = document.querySelectorAll('.note');
+function deleteNote(trash) {
+  if (!isEditing) {
+    const note = trash.parentElement.parentElement;
+    note.remove();
+    updateLS();
+  }
+}
+
+function updateLS() {
+  const notesArr = [];
+  const notes = document.querySelectorAll('.note');
   notes.forEach((note) => {
-    let data = [note.innerText, note.style.backgroundColor];
-    allNotes.push(data);
+    const noteObj = {
+      text: note.firstChild.innerText,
+      color: getComputedStyle(note).getPropertyValue('background-color'),
+    };
+    notesArr.push(noteObj);
   });
-  return false;
+  localStorage.setItem('notes', JSON.stringify(notesArr));
 }
 
-function initialize() {
-  notes = document.querySelectorAll('.note');
-  trash = document.querySelectorAll('.trash');
-  edits = document.querySelectorAll('.edit');
-  trash.forEach((trash) => {
-    trash.addEventListener('click', deleteNote);
-  });
-  edits.forEach((edit) => {
-    edit.addEventListener('click', editNote);
-  });
-  return false;
-}
-
-function updateLocalStorage() {
-  localStorage.setItem('notes', JSON.stringify(allNotes));
-  return false;
-}
-
-function importNotes() {
-  //Used try and catch because there are 0 notes in the local storage
-  try {
-    const oldNotes = JSON.parse(localStorage.getItem('notes'));
-    for (let i = 0; i < oldNotes.length; i++) {
-      allNotes.push(oldNotes[i]);
-      nest.innerHTML += `<div class="note" style="background-color:${oldNotes[i][1]}">${oldNotes[i][0]} <div class="icons-container"><i class="fa-solid fa-pen edit"></i><i class="fa-sharp fa-solid fa-trash trash"></i></div></div>`;
-    }
-    initialize();
-  } catch {
-    return false;
+function fetchNotes() {
+  const notesArr = JSON.parse(localStorage.getItem('notes'));
+  if (notesArr) {
+    notesArr.forEach((note) => addNote(note));
   }
 }
+
+fetchNotes();
