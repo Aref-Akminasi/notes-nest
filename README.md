@@ -47,21 +47,18 @@ Users should be able to:
 
 ### What I learned
 
-It was hard to keep updating the event listeners every time a new note was made or when notes were loaded from local storage. I saw I was doing the same thing over and over in each function. So, I made a different function just for updating the event listeners and call it whenever needed.
+Creating a separate function solely for rendering notes from local storage into the DOM seemed unnecessary and less efficient. Hence, I optimized the existing 'add note' function with a conditional check. This allows it to process values retrieved from local storage if such values are supplied as arguments. This approach streamlined the code and improved efficiency.
 
 ```js
-function initialize() {
-  notes = document.querySelectorAll('.note');
-  trash = document.querySelectorAll('.trash');
-  edits = document.querySelectorAll('.edit');
-  trash.forEach((trash) => {
-    trash.addEventListener('click', deleteNote);
-  });
-  edits.forEach((edit) => {
-    edit.addEventListener('click', editNote);
-  });
-  return false;
-}
+function addNote(note) {
+  let note_text = noteInput.value;
+  let note_color = selectedColor;
+
+  // If note is provided through LS, override
+  if (note) {
+    note_text = note.text;
+    note_color = note.color;
+  }
 ```
 
 ### Continued development
