@@ -14,6 +14,7 @@ colors.forEach((color) => {
 
 deleteNotesBtn.addEventListener('click', () => {
   nest.innerHTML = '';
+  updateLS();
 });
 
 noteInput.addEventListener('focus', () => (error.style.visibility = 'hidden'));
