@@ -198,9 +198,11 @@ h1 {
 }
 
 .note textarea {
+  font-size: 1.6rem;
+  font-family: 'lato';
+  background-color: #f6f6f6;
   height: 15rem;
   resize: none;
-  outline: none;
 }
 
 .note textarea::after {
@@ -221,6 +223,10 @@ h1 {
   color: #fff;
   font-size: 1.7rem;
   cursor: pointer;
+}
+
+.edit.active {
+  transform: scale(1.2);
 }
 
 .trash {

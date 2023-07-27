@@ -1,46 +1,63 @@
+// DOM element references
 const colors = document.querySelectorAll('.color');
 const addNoteBtn = document.getElementById('add-note');
 const noteInput = document.getElementById('note-input');
 const nest = document.querySelector('.nest');
 const error = document.querySelector('.error');
 const deleteNotesBtn = document.getElementById('delete-notes');
+
+// Global Variables
 let selectedColor = 'rgb(85, 107, 47)';
 let isEditing = false;
 let currentEdit = '';
 
+// Handle color selection
 colors.forEach((color) => {
-  color.addEventListener('click', selectColor);
+  color.addEventListener('click', (e) => selectColor(e.target));
 });
 
+function selectColor(colorEl) {
+  // Reset all colors
+  colors.forEach((color) => {
+    color.style.border = 'solid 0.1rem #fff';
+  });
+  // Highlight selected color
+  colorEl.style.border = 'solid 0.3rem #fff';
+  selectedColor = getComputedStyle(colorEl).backgroundColor;
+}
+
+// Handle Add Note Button Click
+addNoteBtn.addEventListener('click', () => addNote());
+
+// Hide Error Message on Input Focus
+noteInput.addEventListener('focus', () => (error.style.visibility = 'hidden'));
+
+// Handle Delete Notes Button Click
 deleteNotesBtn.addEventListener('click', () => {
   nest.innerHTML = '';
   updateLS();
 });
 
-noteInput.addEventListener('focus', () => (error.style.visibility = 'hidden'));
-
-function selectColor() {
-  colors.forEach((color) => {
-    color.style.border = 'solid 0.1rem #fff';
-  });
-  this.style.border = 'solid 0.3rem #fff';
-  selectedColor = getComputedStyle(this).backgroundColor;
-}
-
 function addNote(note) {
   let note_text = noteInput.value;
   let note_color = selectedColor;
+
+  // If note is provided through LS, override
   if (note) {
     note_text = note.text;
     note_color = note.color;
   }
+
+  // Only add note if noteText is present
   if (note_text) {
+    // Create new elements
     const newNote = document.createElement('div');
     const noteText = document.createElement('p');
     const iconsContainer = document.createElement('div');
     const edit = document.createElement('i');
     const trash = document.createElement('i');
 
+    // Set properties and classes
     newNote.classList.add('note');
     newNote.style.backgroundColor = note_color;
 
@@ -52,27 +69,30 @@ function addNote(note) {
 
     iconsContainer.classList.add('icons-container');
 
+    // Append elements to the DOM
     newNote.appendChild(noteText);
     iconsContainer.appendChild(edit);
     iconsContainer.appendChild(trash);
     newNote.appendChild(iconsContainer);
     nest.appendChild(newNote);
 
+    // Add Event Listeners
     edit.addEventListener('click', (e) => editNote(e.target));
     trash.addEventListener('click', (e) => deleteNote(e.target));
     noteInput.value = '';
     updateLS();
   } else {
+    // If noteText is not provided in any way, set error message
     error.style.visibility = 'visible';
   }
 }
-
-addNoteBtn.addEventListener('click', () => addNote());
 
 function editNote(edit) {
   const note = edit.parentElement.parentElement;
   const p = note.firstChild;
   const noteText = p.innerText;
+
+  // Check if not currently editing a note
   if (!isEditing) {
     isEditing = true;
     p.remove();
@@ -81,6 +101,8 @@ function editNote(edit) {
     note.insertBefore(textArea, note.firstChild);
     textArea.focus();
     currentEdit = note;
+    edit.classList.add('active');
+    // Check if it's the current note being edited
   } else if (note == currentEdit) {
     isEditing = false;
     const p = document.createElement('p');
@@ -89,11 +111,13 @@ function editNote(edit) {
     note.firstChild.remove();
     note.insertBefore(p, note.firstChild);
     currentEdit = '';
+    edit.classList.remove('active');
     updateLS();
   }
 }
 
 function deleteNote(trash) {
+  // If the user is editing a note, allow no deletations
   if (!isEditing) {
     const note = trash.parentElement.parentElement;
     note.remove();
@@ -114,6 +138,7 @@ function updateLS() {
   localStorage.setItem('notes', JSON.stringify(notesArr));
 }
 
+// Fetching Notes from LocalStorage
 function fetchNotes() {
   const notesArr = JSON.parse(localStorage.getItem('notes'));
   if (notesArr) {
@@ -121,4 +146,5 @@ function fetchNotes() {
   }
 }
 
+// Start the app
 fetchNotes();
