@@ -29,9 +29,6 @@ function selectColor(colorEl) {
 // Handle Add Note Button Click
 addNoteBtn.addEventListener('click', () => addNote());
 
-// Hide Error Message on Input Focus
-noteInput.addEventListener('focus', () => (error.style.visibility = 'hidden'));
-
 // Handle Delete Notes Button Click
 deleteNotesBtn.addEventListener('click', () => {
   nest.innerHTML = '';
@@ -53,7 +50,6 @@ function addNote(note) {
     // Create new elements
     const newNote = document.createElement('div');
     const noteText = document.createElement('p');
-    const iconsContainer = document.createElement('div');
     const edit = document.createElement('i');
     const trash = document.createElement('i');
 
@@ -67,65 +63,65 @@ function addNote(note) {
     edit.className = 'fa-solid fa-pen edit';
     trash.className = 'fa-sharp fa-solid fa-trash trash';
 
-    iconsContainer.classList.add('icons-container');
-
     // Append elements to the DOM
     newNote.appendChild(noteText);
-    iconsContainer.appendChild(edit);
-    iconsContainer.appendChild(trash);
-    newNote.appendChild(iconsContainer);
+    newNote.appendChild(edit);
+    newNote.appendChild(trash);
     if (note) {
       nest.appendChild(newNote);
     } else {
       nest.insertBefore(newNote, nest.firstChild);
     }
 
-    // Add Event Listeners
+    // Add Event Listeners to the edit and delete
     edit.addEventListener('click', (e) => editNote(e.target));
     trash.addEventListener('click', (e) => deleteNote(e.target));
     noteInput.value = '';
     updateLS();
   } else {
     // If noteText is not provided in any way, set error message
-    error.style.visibility = 'visible';
+    setError("The content of a note can't be empty");
   }
 }
 
 function editNote(edit) {
-  const note = edit.parentElement.parentElement;
-  const p = note.firstChild;
-  const noteText = p.innerText;
+  const note = edit.parentElement;
+  const noteTextEl = note.querySelector('.note-text');
+  const noteText = noteTextEl.innerText;
 
-  // Check if not currently editing a note
   if (!isEditing) {
+    console.log(noteTextEl.innerText);
+    console.log(noteText);
     isEditing = true;
-    p.remove();
+    edit.classList.add('active');
+    noteTextEl.classList.add('hidden');
     const textArea = document.createElement('textarea');
     textArea.value = noteText;
     note.insertBefore(textArea, note.firstChild);
     textArea.focus();
     currentEdit = note;
-    edit.classList.add('active');
-    // Check if it's the current note being edited
+    // Check if the element is being edited is the same element
   } else if (note == currentEdit) {
     isEditing = false;
-    const p = document.createElement('p');
-    p.innerText = note.firstChild.value;
-    p.classList.add('note-text');
+    noteTextEl.innerText = note.firstChild.value;
+    noteTextEl.classList.remove('hidden');
     note.firstChild.remove();
-    note.insertBefore(p, note.firstChild);
     currentEdit = '';
     edit.classList.remove('active');
     updateLS();
+  } else {
+    setError('Please finish your edit first');
   }
 }
 
 function deleteNote(trash) {
   // If the user is editing a note, allow no deletations
   if (!isEditing) {
-    const note = trash.parentElement.parentElement;
+    const note = trash.parentElement;
     note.remove();
     updateLS();
+  } else {
+    setError('Please finish your edit first');
   }
 }
 
@@ -148,6 +144,16 @@ function fetchNotes() {
   if (notesArr) {
     notesArr.forEach((note) => addNote(note));
   }
+}
+
+// Set an error message and remove it after 3 seconds
+function setError(msg) {
+  error.innerText = msg;
+  error.style.visibility = 'visible';
+  setTimeout(() => {
+    error.style.visibility = 'hidden';
+    error.innerText = '';
+  }, 3000);
 }
 
 // Fetch notes from the LS when the window has loaded
