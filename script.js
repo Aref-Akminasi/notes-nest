@@ -31,8 +31,12 @@ addNoteBtn.addEventListener('click', () => addNote());
 
 // Handle Delete Notes Button Click
 deleteNotesBtn.addEventListener('click', () => {
-  nest.innerHTML = '';
-  updateLS();
+  if (!isEditing) {
+    nest.innerHTML = '';
+    updateLS();
+  } else {
+    setError('Please finish your edit first');
+  }
 });
 
 function addNote(note) {
