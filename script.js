@@ -90,8 +90,6 @@ function editNote(edit) {
   const noteText = noteTextEl.innerText;
 
   if (!isEditing) {
-    console.log(noteTextEl.innerText);
-    console.log(noteText);
     isEditing = true;
     edit.classList.add('active');
     noteTextEl.classList.add('hidden');
