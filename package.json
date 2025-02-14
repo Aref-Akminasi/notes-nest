@@ -1,0 +1,16 @@
+{
+  "name": "notes-nest",
+  "version": "1.0.0",
+  "description": "This is a self-designed and self-built project. drawing inspiration from Google Keep's versatile tool. After thoroughly studying its functionality, I successfully created my own unique interpretation of it.",
+  "main": "script.js",
+  "scripts": {
+    "cy:open": "cypress open",
+    "e2e:chrome": "cypress run --browser chrome"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.0.3"
+  }
+}
